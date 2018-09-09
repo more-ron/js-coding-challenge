@@ -1,5 +1,7 @@
 require 'open-uri'
 
+# Given an ASIN this job gets the product page from Amazon and then parses the details it contains.
+# The result is then saved to a Product record.
 class RetrieveProductJob < ApplicationJob
   queue_as :default
 
@@ -83,6 +85,11 @@ class RetrieveProductJob < ApplicationJob
     ranks
   end
 
+  # Extracts rank and category from the field value.
+  # Ex:
+  #   "#1 in SomeCategory (See top 100)" # => { 'rank' => '1', 'category' => 'SomeCategory' }
+  #   "#1 in SomeCategory" # => { 'rank' => '1', 'category' => 'SomeCategory' }
+  #   "#1 in SomeCategory > SubCategory" # => { 'rank' => '1', 'category' => 'SomeCategory > SubCategory' }
   def extract_rank_from_string(string)
     match = /\A\#(.*)[\n\r\s ]+in[\n\r\s ]+(.*?)([\n\r\s ]+\(See top.*\))?\z/.match(string)
 
@@ -92,6 +99,7 @@ class RetrieveProductJob < ApplicationJob
     }
   end
 
+  # @return [Nokogiri::XML::NodeSet]
   def product_details_rows
     @product_details_rows ||= product_page.css('#prodDetails table tr')
   end
@@ -115,6 +123,8 @@ class RetrieveProductJob < ApplicationJob
       'cookie' => amazon_cookie,
       'referer' => Rails.cache.fetch('amazon-referer') { amazon_product_page_url },
       'upgrade-insecure-requests' => '1',
+
+      # Amazon might want to allow Google Bot to spider through their site.
       'user-agent' => 'Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)'
     )
   ensure
@@ -130,6 +140,8 @@ class RetrieveProductJob < ApplicationJob
     end
   end
 
+  # Fake cookie value taken from a browser.
+  # @return [String]
   def amazon_cookie
     Rails.cache.fetch('amazon-cookie') do
       'session-id=142-3890860-1146932; session-id-time=2082787201l; x-wl-uid=1BtZAYdZJiS8rhY0b2cLGjZAdbkvckhleAxU2ub1lfhDzgTZb4aotL//F4fZ8WjYJsIREPagMqnw=; ubid-main=132-9770205-5722210; session-token=KT6ZvaimgH7yPrylXxUaMkreSgj1YSYl5Aw1XxejfpHIgACnkIlnItKIGe+kxV/XpslRhpS/kOCz3c26GzEBiXyYXvZvLQUvLPniB5eQKWYQQPfxtbgs6S6r3W4oiVvRYjly5TFymtX7Dq2BL7pHreZuTGR/0ZLWFT4vxpQTFZ2H9coZqAM7+Qo8OwBVuBgI28fvYdtg+0UjpuBln9Lz+Ur8ROqWlbSP2xYAXI/tRN0oe3lPnrUowZbMcf0sXRMO; csm-hit=tb:s-J3JXKP3BEPE7PNXS5ZTA|1536472201902&adb:adblk_no'

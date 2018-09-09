@@ -69,9 +69,6 @@
 <script>
 import BField from "buefy/src/components/field/Field";
 
-
-
-
 export default {
   components: { BField },
   data: function () {

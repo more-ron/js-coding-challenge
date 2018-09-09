@@ -27,6 +27,8 @@ class Api::V1::ProductsController < ApplicationController
     @product ||= retrieve_product
   end
 
+  # If the product record exists return it. If it's stale then refresh its data in the background.
+  # If the product record doesn't exist then retrieve and return it.
   def retrieve_product
     found_product = Product.find_by asin: asin
 
