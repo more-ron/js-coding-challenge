@@ -12,7 +12,7 @@ class RetrieveProductJobTest < ActiveJob::TestCase
     assert_equal 'Baby Banana Infant Training Toothbrush and Teether, Yellow', product.name
     assert_equal 'Baby', product.main_category
     assert_equal '4.3 x 0.4 x 7.9 inches', product.dimensions
-    assert_equal 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7', product.main_image
+    assert_equal 'https://images-na.ssl-images-amazon.com/images/I/316WpcHV%2BHL._SY300_QL70_FMwebp_.jpg', product.main_image
 
     assert_equal [
                    { "rank" => "6", "category" => "Baby" },

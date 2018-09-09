@@ -11,7 +11,7 @@ class Api::V1::ProductsControllerTest < ActionDispatch::IntegrationTest
         "asin" => "B002QYW8LW",
         "dimensions" => "4.3 x 0.4 x 7.9 inches",
         "main_category" => "Baby",
-        "main_image" => "https://images-na.ssl-images-amazon.com/images/I/316WpcHV%2BHL._SY300_QL70_.jpg",
+        "main_image" => "https://images-na.ssl-images-amazon.com/images/I/316WpcHV%2BHL._SY300_QL70_FMwebp_.jpg",
         "name" => "Baby Banana Infant Training Toothbrush and Teether, Yellow",
         "rankings" => [
           { "rank" => "6", "category" => "Baby" },
