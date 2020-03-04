@@ -37,6 +37,4 @@ TODO:
 * Add metric tracking (recommendation: Mixpanel)
 * Add authentication (recommendation: Auth0)
 
-Demo: https://more-ron-js-challenge.herokuapp.com/
-
 -- MoreRon 
